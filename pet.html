@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dr. Hasib</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      background: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+    }
+    iframe {
+      flex: 1;
+      border: none;
+      width: 100%;
+    }
+    .download-btn {
+      background: #007bff;
+      color: #fff;
+      text-align: center;
+      padding: 15px;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 6px;
+      margin: 0;
+    }
+    .download-btn:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <!-- PDF ব্রাউজারে দেখাবে -->
+  <iframe src="pet_medicine.pdf"></iframe>
+
+  <!-- ডাউনলোড বাটন -->
+  <a href="pet_medicine.pdf" download class="download-btn">
+    Download the PDF
+  </a>
+</body>
+</html>
