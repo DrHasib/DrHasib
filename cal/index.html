@@ -57,10 +57,16 @@
     button.equal {
       background-color: #007bff;
       color: white;
-      grid-column: span 2;
     }
     button.equal:hover {
       background-color: #0056b3;
+    }
+    button.clear {
+      background-color: #f44336;
+      color: white;
+    }
+    button.clear:hover {
+      background-color: #d32f2f;
     }
   </style>
 </head>
@@ -71,12 +77,12 @@
       <button onclick="appendNumber('7')">7</button>
       <button onclick="appendNumber('8')">8</button>
       <button onclick="appendNumber('9')">9</button>
-      <button class="operator" onclick="appendOperator('/')">/</button>
+      <button class="operator" onclick="appendOperator('÷')">÷</button>
 
       <button onclick="appendNumber('4')">4</button>
       <button onclick="appendNumber('5')">5</button>
       <button onclick="appendNumber('6')">6</button>
-      <button class="operator" onclick="appendOperator('*')">*</button>
+      <button class="operator" onclick="appendOperator('x')">x</button>
 
       <button onclick="appendNumber('1')">1</button>
       <button onclick="appendNumber('2')">2</button>
@@ -85,10 +91,10 @@
 
       <button onclick="appendNumber('0')">0</button>
       <button onclick="appendNumber('.')">.</button>
+      <button class="clear" onclick="clearDisplay()">C</button>
       <button class="equal" onclick="calculateResult()">=</button>
-      <button class="operator" onclick="appendOperator('+')">+</button>
 
-      <button onclick="clearDisplay()" style="grid-column: span 4; background-color:#f44336; color:white;">C</button>
+      <button class="operator" onclick="appendOperator('+')">+</button>
     </div>
   </div>
 
@@ -102,15 +108,16 @@
     function appendOperator(operator) {
       if(display.value === '') return;
       const lastChar = display.value[display.value.length - 1];
-      if(['+', '-', '*', '/'].includes(lastChar)) {
+      if(['+', '-', 'x', '÷'].includes(lastChar)) {
         display.value = display.value.slice(0, -1); // replace last operator
       }
       display.value += operator;
     }
 
     function calculateResult() {
+      let expr = display.value.replace(/÷/g, '/').replace(/x/g, '*');
       try {
-        display.value = eval(display.value);
+        display.value = eval(expr);
       } catch {
         display.value = 'Error';
       }
