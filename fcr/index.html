@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,7 +12,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     min-height: 100vh;
     padding: 20px;
     box-sizing: border-box;
@@ -27,7 +26,7 @@
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 16px;
     padding: 20px;
-    max-width: 400px;
+    max-width: 420px;
     width: 100%;
     box-shadow: 0 0 10px rgba(0,0,0,0.4);
   }
@@ -36,14 +35,25 @@
     margin-top: 12px;
     font-weight: bold;
   }
-  input {
+  .input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     width: 100%;
+  }
+  input, select {
     padding: 10px;
-    margin-top: 6px;
     border-radius: 8px;
     border: none;
     outline: none;
-    font-size: 16px;
+    font-size: 15px;
+  }
+  input {
+    flex: 1;
+  }
+  select {
+    background-color: #1e293b;
+    color: white;
   }
   button {
     margin-top: 16px;
@@ -82,6 +92,20 @@
   .copy-btn:hover {
     background-color: #16a34a;
   }
+  .total-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .total-output {
+    flex: 1;
+    background-color: #1e293b;
+    padding: 10px;
+    border-radius: 8px;
+    color: #38bdf8;
+    text-align: center;
+    font-weight: bold;
+  }
   footer {
     margin-top: 30px;
     text-align: center;
@@ -101,20 +125,34 @@
 
 <h1>FCR Calculator</h1>
 <div class="calculator">
-  <label for="avgWeight">Average Body Weight per Bird (kg):</label>
-  <input type="number" id="avgWeight" placeholder="Enter average weight" step="0.01">
+  <label>Average Body Weight per Bird:</label>
+  <div class="input-row">
+    <input type="number" id="avgWeight" placeholder="Enter average weight" step="0.01">
+    <select id="weightUnit">
+      <option value="kg">kg</option>
+      <option value="g">g</option>
+    </select>
+  </div>
 
-  <label for="totalBirds">Total Birds:</label>
-  <input type="number" id="totalBirds" placeholder="Enter total birds">
+  <label>Total Birds:</label>
+  <div class="total-row">
+    <input type="number" id="totalBirds" placeholder="Enter total birds">
+    <div class="total-output" id="totalWeightBox">Total: 0 kg</div>
+  </div>
 
-  <label for="feedConsumed">Total Feed Consumed (kg):</label>
-  <input type="number" id="feedConsumed" placeholder="Enter total feed consumed" step="0.01">
+  <label>Total Feed Consumed:</label>
+  <div class="input-row">
+    <input type="number" id="feedConsumed" placeholder="Enter feed consumed" step="0.01">
+    <select id="feedUnit">
+      <option value="kg">kg</option>
+      <option value="g">g</option>
+    </select>
+  </div>
 
   <button onclick="calculateFCR()">Calculate FCR</button>
 
   <div class="result" id="result" style="display:none;">
-    <p><strong>Total Weight of Birds:</strong> <span id="totalWeight"></span> kg</p>
-    <p><strong>FCR:</strong> <span id="fcr"></span> 
+    <p><strong>FCR:</strong> <span id="fcr"></span>
       <button class="copy-btn" onclick="copyFCR()">Copy</button>
     </p>
     <p><strong>FCR per Bag (50 kg):</strong> <span id="fcrPerBag"></span></p>
@@ -130,17 +168,23 @@ function calculateFCR() {
   const avgWeight = parseFloat(document.getElementById('avgWeight').value);
   const totalBirds = parseInt(document.getElementById('totalBirds').value);
   const feedConsumed = parseFloat(document.getElementById('feedConsumed').value);
+  const weightUnit = document.getElementById('weightUnit').value;
+  const feedUnit = document.getElementById('feedUnit').value;
 
   if (isNaN(avgWeight) || isNaN(totalBirds) || isNaN(feedConsumed) || totalBirds <= 0 || feedConsumed <= 0) {
     alert("Please enter valid numbers in all fields.");
     return;
   }
 
-  const totalWeight = avgWeight * totalBirds;
-  const fcr = feedConsumed / totalWeight;
+  // Convert grams to kg if needed
+  const avgWeightKg = weightUnit === "g" ? avgWeight / 1000 : avgWeight;
+  const feedConsumedKg = feedUnit === "g" ? feedConsumed / 1000 : feedConsumed;
+
+  const totalWeight = avgWeightKg * totalBirds;
+  const fcr = feedConsumedKg / totalWeight;
   const fcrPerBag = (1 / fcr) * 50;
 
-  document.getElementById('totalWeight').textContent = totalWeight.toFixed(2);
+  document.getElementById('totalWeightBox').textContent = `Total: ${totalWeight.toFixed(2)} kg`;
   document.getElementById('fcr').textContent = fcr.toFixed(3);
   document.getElementById('fcrPerBag').textContent = fcrPerBag.toFixed(2);
   document.getElementById('result').style.display = "block";
@@ -150,8 +194,25 @@ function copyFCR() {
   const fcrValue = document.getElementById('fcr').textContent;
   navigator.clipboard.writeText(fcrValue)
     .then(() => alert("FCR copied: " + fcrValue))
-    .catch(err => alert("Failed to copy FCR"));
+    .catch(() => alert("Failed to copy FCR"));
 }
+
+// Live total weight update
+document.querySelectorAll('#avgWeight, #totalBirds, #weightUnit').forEach(el => {
+  el.addEventListener('input', () => {
+    const avgWeight = parseFloat(document.getElementById('avgWeight').value);
+    const totalBirds = parseInt(document.getElementById('totalBirds').value);
+    const weightUnit = document.getElementById('weightUnit').value;
+
+    if (!isNaN(avgWeight) && !isNaN(totalBirds)) {
+      const avgWeightKg = weightUnit === "g" ? avgWeight / 1000 : avgWeight;
+      const totalWeight = avgWeightKg * totalBirds;
+      document.getElementById('totalWeightBox').textContent = `Total: ${totalWeight.toFixed(2)} kg`;
+    } else {
+      document.getElementById('totalWeightBox').textContent = "Total: 0 kg";
+    }
+  });
+});
 </script>
 
 </body>
