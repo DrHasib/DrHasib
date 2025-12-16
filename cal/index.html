@@ -46,39 +46,22 @@
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      background-color: #333;
-      color: #fff;
+      background-color: #333; /* সব বাটনের ব্যাকগ্রাউন্ড একই */
+      color: #fff; /* default number text color */
       transition: 0.2s;
     }
     button:hover {
       background-color: #444;
     }
-    button.operator {
-      background-color: #ff9500;
-      color: white;
-    }
-    button.operator:hover {
-      background-color: #e08a00;
+    /* অপারেটর/ফাংশন বাটনের টেক্সট কালার পরিবর্তন */
+    button.operator, 
+    button.clear, 
+    button.backspace, 
+    button.equal {
+      color: #26cc00;
     }
     button.equal {
-      background-color: #007bff;
-      color: white;
       grid-row: span 2;
-    }
-    button.equal:hover {
-      background-color: #0056b3;
-    }
-    button.clear {
-      background-color: #f44336;
-    }
-    button.clear:hover {
-      background-color: #d32f2f;
-    }
-    button.backspace {
-      background-color: #555;
-    }
-    button.backspace:hover {
-      background-color: #666;
     }
   </style>
 </head>
@@ -111,7 +94,7 @@
       <button class="equal" onclick="calculateResult()">=</button>
 
       <!-- Row 5 -->
-      <button onclick="appendOperator('%')">%</button>
+      <button class="operator" onclick="appendOperator('%')">%</button>
       <button onclick="appendNumber('0')">0</button>
       <button onclick="appendNumber('.')">.</button>
     </div>
