@@ -1,174 +1,336 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculator (Made by Dr Hasib)</title>
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="favicon-192x192.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <style>
-.branding-box {
-  margin-top: 25px;
-  padding: 8px 12px;
-  border: 1px solid white;
-  border-radius: 8px;
-  display: inline-block;
-  background-color: rgba(255, 255, 255, 0.05);
-  font-size: 13px;
-}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FCR Calculator - Dr Hasibul Alam</title>
+<style>
+  body {
+    background-color: #0f172a;
+    color: white;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    min-height: 100vh;
+  }
 
-.branding-box a {
-  color: #38bdf8;
-  text-decoration: none;
-  font-weight: bold;
-}
+  h1 {
+    color: #38bdf8;
+    text-align: center;
+    margin-bottom: 20px;
+  }
 
-.branding-box a:hover {
-  text-decoration: underline;
-}
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      background-color: #121212;
-    }
-    .calculator {
-      background-color: #1e1e1e;
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-      width: 95%;
-      max-width: 350px;
-    }
-    .display {
-      width: 100%;
-      height: 80px; /* Display box বড় করা হয়েছে */
-      text-align: right;
-      font-size: 32px;
-      margin-bottom: 20px;
-      padding: 10px;
-      border-radius: 10px;
-      border: none;
-      background-color: #2c2c2c;
-      color: #fff;
-      box-sizing: border-box;
-    }
-    .buttons {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-    }
-    button {
-      padding: 22px; /* বাটনের হাইট একটু বড় করা হয়েছে */
-      font-size: 24px;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      background-color: #333; /* সব বাটনের ব্যাকগ্রাউন্ড একই */
-      color: #fff; /* নাম্বার বাটনের টেক্সট কালার */
-      transition: 0.2s;
-    }
-    button:hover {
-      background-color: #444;
-    }
-    /* অপারেটর/ফাংশন বাটনের টেক্সট কালার পরিবর্তন */
-    button.operator, 
-    button.clear, 
-    button.backspace, 
-    button.equal {
-      color: #26cc00;
-    }
-    button.equal {
-      grid-row: span 2;
-    }
-  </style>
+  .calculator {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    padding: 20px;
+    max-width: 420px;
+    width: 100%;
+  }
+
+  label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 6px;
+  }
+
+  .input-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+
+  input {
+    flex: 1;
+    height: 40px;
+    padding: 0 10px;
+    border-radius: 6px;
+    border: none;
+    font-size: 14px;
+    line-height: 1;
+    outline: none;
+    box-sizing: border-box;
+  }
+
+  /* Custom dropdown */
+  .dropdown {
+    position: relative;
+    width: 80px;
+    height: 40px;
+    border: 1px solid white;
+    border-radius: 6px;
+    box-sizing: border-box;
+  }
+
+  .dropdown button {
+    width: 100%;
+    height: 100%;
+    background-color: #1e293b;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .dropdown button svg {
+    width: 12px;
+    height: 12px;
+    margin-left: 5px;
+    fill: white;
+  }
+
+  .dropdown-list {
+    display: none;
+    position: absolute;
+    top: 42px;
+    left: 0;
+    background-color: #1e293b;
+    border-radius: 6px;
+    overflow: hidden;
+    z-index: 10;
+    width: 100%;
+    border: 1px solid rgba(255,255,255,0.3);
+  }
+
+  .dropdown-list div {
+    padding: 8px;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .dropdown-list div:hover {
+    background-color: #334155;
+  }
+
+  .total-output {
+    width: 80px;
+    height: 40px;
+    background-color: #1e293b;
+    color: #38bdf8;
+    border-radius: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    border: 1px solid white;
+    box-sizing: border-box;
+    font-size: 14px;
+  }
+
+  button.calc-btn {
+    width: 100%;
+    background-color: #38bdf8;
+    color: #0f172a;
+    font-size: 15px;
+    border: none;
+    border-radius: 6px;
+    padding: 10px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  button.calc-btn:hover {
+    background-color: #0ea5e9;
+  }
+
+  .result {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .result-box {
+    background-color: white;
+    color: #0f172a;
+    border-radius: 6px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    font-size: 15px;
+  }
+
+  .copy-icon {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    fill: #0f172a;
+  }
+
+  .copied-text {
+    font-size: 12px;
+    color: #16a34a;
+    opacity: 0;
+    margin-left: 4px;
+  }
+
+  /* Branding box */
+  .branding-box {
+    margin-top: 25px;
+    padding: 8px 12px;
+    border: 1px solid white;
+    border-radius: 8px;
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.05);
+    font-size: 13px;
+  }
+
+  .branding-box a {
+    color: #38bdf8;
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  .branding-box a:hover {
+    text-decoration: underline;
+  }
+</style>
 </head>
 <body>
-  <div class="calculator">
-    <input type="text" class="display" id="display" disabled>
-    <div class="buttons">
-      <!-- Row 1 -->
-      <button class="clear" onclick="clearDisplay()">C</button>
-      <button class="operator" onclick="appendOperator('÷')">÷</button>
-      <button class="operator" onclick="appendOperator('x')">x</button>
-      <button class="backspace" onclick="backspace()">⌫</button>
 
-      <!-- Row 2 -->
-      <button onclick="appendNumber('7')">7</button>
-      <button onclick="appendNumber('8')">8</button>
-      <button onclick="appendNumber('9')">9</button>
-      <button class="operator" onclick="appendOperator('-')">-</button>
+<h1>FCR Calculator</h1>
+<div class="calculator">
 
-      <!-- Row 3 -->
-      <button onclick="appendNumber('4')">4</button>
-      <button onclick="appendNumber('5')">5</button>
-      <button onclick="appendNumber('6')">6</button>
-      <button class="operator" onclick="appendOperator('+')">+</button>
-
-      <!-- Row 4 -->
-      <button onclick="appendNumber('1')">1</button>
-      <button onclick="appendNumber('2')">2</button>
-      <button onclick="appendNumber('3')">3</button>
-      <button class="equal" onclick="calculateResult()">=</button>
-
-      <!-- Row 5 -->
-      <button class="operator" onclick="percentage()">%</button>
-      <button onclick="appendNumber('0')">0</button>
-      <button onclick="appendNumber('.')">.</button>
+  <label>Average Body Weight per Bird:</label>
+  <div class="input-row">
+    <input type="number" id="avgWeight" placeholder="Enter average weight" step="0.01">
+    <div class="dropdown" id="weightDropdown">
+      <button id="weightBtn">kg
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+      </button>
+      <div class="dropdown-list">
+        <div onclick="selectUnit('weight', 'kg')">kg</div>
+        <div onclick="selectUnit('weight', 'g')">g</div>
+      </div>
     </div>
   </div>
 
-  <script>
-    const display = document.getElementById('display');
+  <label>Total Birds:</label>
+  <div class="input-row">
+    <input type="number" id="totalBirds" placeholder="Enter total birds">
+    <div class="total-output" id="totalWeightBox">0 kg</div>
+  </div>
 
-    function appendNumber(number) {
-      display.value += number;
-    }
+  <label>Total Feed Consumed:</label>
+  <div class="input-row">
+    <input type="number" id="feedConsumed" placeholder="Enter feed consumed" step="0.01">
+    <div class="dropdown" id="feedDropdown">
+      <button id="feedBtn">kg
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+      </button>
+      <div class="dropdown-list">
+        <div onclick="selectUnit('feed', 'kg')">kg</div>
+        <div onclick="selectUnit('feed', 'g')">g</div>
+      </div>
+    </div>
+  </div>
 
-    function appendOperator(operator) {
-      if(display.value === '') return;
-      const lastChar = display.value[display.value.length - 1];
-      if(['+', '-', 'x', '÷'].includes(lastChar)) {
-        display.value = display.value.slice(0, -1); // replace last operator
-      }
-      display.value += operator;
-    }
+  <button class="calc-btn" onclick="calculateFCR()">Calculate FCR</button>
 
-    function calculateResult() {
-      let expr = display.value.replace(/÷/g, '/').replace(/x/g, '*');
-      try {
-        display.value = eval(expr);
-      } catch {
-        display.value = 'Error';
-      }
-    }
+  <div class="result" id="result" style="display:none;">
+    <div class="result-box">
+      <span>FCR: <span id="fcr">0.000</span></span>
+      <div style="display:flex;align-items:center;">
+        <svg class="copy-icon" onclick="copyFCR()" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v16h14c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 18H8V7h11v16z"/>
+        </svg>
+        <span class="copied-text" id="copiedText">Copied</span>
+      </div>
+    </div>
+    <div class="result-box">
+      <span>FCR per Bag (50 kg): <span id="fcrPerBag">0.00</span></span>
+    </div>
+  </div>
+</div>
 
-    function clearDisplay() {
-      display.value = '';
-    }
-
-    function backspace() {
-      display.value = display.value.slice(0, -1);
-    }
-
-    function percentage() {
-      if(display.value === '') return;
-      // find last number in display
-      let lastNumberMatch = display.value.match(/(\d+\.?\d*)$/);
-      if(lastNumberMatch) {
-        let number = parseFloat(lastNumberMatch[0]);
-        let result = number / 100;
-        display.value = display.value.replace(/(\d+\.?\d*)$/, result);
-      }
-    }
-  </script>
+<!-- Branding Box -->
 <div class="branding-box">
   Made by <a href="https://drhasib.com" target="_blank">Dr Hasibul Alam</a>
 </div>
+
+<script>
+let weightUnit = "kg";
+let feedUnit = "kg";
+
+function selectUnit(type, unit) {
+  if (type === 'weight') {
+    weightUnit = unit;
+    document.getElementById('weightBtn').childNodes[0].nodeValue = unit + ' ';
+    document.querySelector("#weightDropdown .dropdown-list").style.display = 'none';
+  } else {
+    feedUnit = unit;
+    document.getElementById('feedBtn').childNodes[0].nodeValue = unit + ' ';
+    document.querySelector("#feedDropdown .dropdown-list").style.display = 'none';
+  }
+}
+
+document.querySelectorAll('.dropdown button').forEach(btn => {
+  btn.addEventListener('click', e => {
+    const list = e.target.closest('.dropdown').querySelector('.dropdown-list');
+    list.style.display = list.style.display === 'block' ? 'none' : 'block';
+  });
+});
+
+window.addEventListener('click', e => {
+  if (!e.target.closest('.dropdown')) {
+    document.querySelectorAll('.dropdown-list').forEach(l => l.style.display = 'none');
+  }
+});
+
+function calculateFCR() {
+  const avgWeight = parseFloat(document.getElementById('avgWeight').value);
+  const totalBirds = parseInt(document.getElementById('totalBirds').value);
+  const feedConsumed = parseFloat(document.getElementById('feedConsumed').value);
+
+  if (isNaN(avgWeight) || isNaN(totalBirds) || isNaN(feedConsumed) || totalBirds <= 0 || feedConsumed <= 0) {
+    alert("Please enter valid numbers in all fields.");
+    return;
+  }
+
+  const avgWeightKg = weightUnit === "g" ? avgWeight / 1000 : avgWeight;
+  const feedConsumedKg = feedUnit === "g" ? feedConsumed / 1000 : feedConsumed;
+
+  const totalWeight = avgWeightKg * totalBirds;
+  const fcr = feedConsumedKg / totalWeight;
+  const fcrPerBag = (1 / fcr) * 50;
+
+  document.getElementById('totalWeightBox').textContent = `${totalWeight.toFixed(2)} kg`;
+  document.getElementById('fcr').textContent = fcr.toFixed(3);
+  document.getElementById('fcrPerBag').textContent = fcrPerBag.toFixed(2);
+  document.getElementById('result').style.display = "flex";
+}
+
+function copyFCR() {
+  const fcrValue = document.getElementById('fcr').textContent;
+  navigator.clipboard.writeText(fcrValue);
+  const copied = document.getElementById('copiedText');
+  copied.style.opacity = '1';
+  setTimeout(() => copied.style.opacity = '0', 1500);
+}
+
+document.querySelectorAll('#avgWeight, #totalBirds').forEach(el => {
+  el.addEventListener('input', () => {
+    const avg = parseFloat(document.getElementById('avgWeight').value);
+    const birds = parseInt(document.getElementById('totalBirds').value);
+    if (!isNaN(avg) && !isNaN(birds)) {
+      const total = (weightUnit === 'g' ? avg/1000 : avg) * birds;
+      document.getElementById('totalWeightBox').textContent = `${total.toFixed(2)} kg`;
+    } else {
+      document.getElementById('totalWeightBox').textContent = '0 kg';
+    }
+  });
+});
+</script>
+
 </body>
 </html>
