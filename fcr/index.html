@@ -12,51 +12,74 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 100vh;
     padding: 20px;
+    min-height: 100vh;
     box-sizing: border-box;
   }
+
   h1 {
-    text-align: center;
     color: #38bdf8;
     margin-bottom: 20px;
+    text-align: center;
   }
+
   .calculator {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 16px;
     padding: 20px;
-    max-width: 420px;
     width: 100%;
+    max-width: 420px;
     box-shadow: 0 0 10px rgba(0,0,0,0.4);
   }
+
   label {
-    display: block;
-    margin-top: 12px;
     font-weight: bold;
+    display: block;
+    margin-bottom: 6px;
   }
+
   .input-row {
     display: flex;
     align-items: center;
-    gap: 8px;
-    width: 100%;
+    gap: 6px;
+    margin-bottom: 14px;
   }
-  input, select {
-    padding: 10px;
+
+  input, select, .total-output {
+    height: 44px;
     border-radius: 8px;
     border: none;
-    outline: none;
     font-size: 15px;
+    outline: none;
+    box-sizing: border-box;
   }
+
   input {
     flex: 1;
+    padding: 10px;
   }
+
   select {
+    width: 70px;
     background-color: #1e293b;
     color: white;
+    text-align: center;
   }
+
+  .total-output {
+    flex: 1;
+    background-color: #1e293b;
+    color: #38bdf8;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+  }
+
   button {
-    margin-top: 16px;
+    margin-top: 10px;
     width: 100%;
     background-color: #38bdf8;
     color: #0f172a;
@@ -67,55 +90,48 @@
     cursor: pointer;
     font-weight: bold;
   }
+
   button:hover {
     background-color: #0ea5e9;
   }
+
   .result {
     margin-top: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 12px;
-    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
-  .result p {
-    margin: 6px 0;
-  }
-  .copy-btn {
-    background-color: #22c55e;
+
+  .result-box {
+    background-color: white;
     color: #0f172a;
-    padding: 8px 12px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    margin-top: 8px;
-  }
-  .copy-btn:hover {
-    background-color: #16a34a;
-  }
-  .total-row {
+    border-radius: 8px;
+    padding: 12px;
     display: flex;
     align-items: center;
-    gap: 8px;
-  }
-  .total-output {
-    flex: 1;
-    background-color: #1e293b;
-    padding: 10px;
-    border-radius: 8px;
-    color: #38bdf8;
-    text-align: center;
+    justify-content: space-between;
     font-weight: bold;
+    font-size: 16px;
   }
+
+  .copy-icon {
+    cursor: pointer;
+    font-size: 18px;
+    color: #0f172a;
+  }
+
   footer {
     margin-top: 30px;
     text-align: center;
     font-size: 14px;
   }
+
   footer a {
     color: #38bdf8;
     text-decoration: none;
     font-weight: bold;
   }
+
   footer a:hover {
     text-decoration: underline;
   }
@@ -125,6 +141,7 @@
 
 <h1>FCR Calculator</h1>
 <div class="calculator">
+
   <label>Average Body Weight per Bird:</label>
   <div class="input-row">
     <input type="number" id="avgWeight" placeholder="Enter average weight" step="0.01">
@@ -135,9 +152,9 @@
   </div>
 
   <label>Total Birds:</label>
-  <div class="total-row">
+  <div class="input-row">
     <input type="number" id="totalBirds" placeholder="Enter total birds">
-    <div class="total-output" id="totalWeightBox">Total: 0 kg</div>
+    <div class="total-output" id="totalWeightBox">0 kg</div>
   </div>
 
   <label>Total Feed Consumed:</label>
@@ -152,10 +169,13 @@
   <button onclick="calculateFCR()">Calculate FCR</button>
 
   <div class="result" id="result" style="display:none;">
-    <p><strong>FCR:</strong> <span id="fcr"></span>
-      <button class="copy-btn" onclick="copyFCR()">Copy</button>
-    </p>
-    <p><strong>FCR per Bag (50 kg):</strong> <span id="fcrPerBag"></span></p>
+    <div class="result-box">
+      <span>FCR: <span id="fcr">0.000</span></span>
+      <span class="copy-icon" onclick="copyFCR()">📋</span>
+    </div>
+    <div class="result-box">
+      <span>FCR per Bag (50 kg): <span id="fcrPerBag">0.00</span></span>
+    </div>
   </div>
 </div>
 
@@ -184,10 +204,10 @@ function calculateFCR() {
   const fcr = feedConsumedKg / totalWeight;
   const fcrPerBag = (1 / fcr) * 50;
 
-  document.getElementById('totalWeightBox').textContent = `Total: ${totalWeight.toFixed(2)} kg`;
+  document.getElementById('totalWeightBox').textContent = `${totalWeight.toFixed(2)} kg`;
   document.getElementById('fcr').textContent = fcr.toFixed(3);
   document.getElementById('fcrPerBag').textContent = fcrPerBag.toFixed(2);
-  document.getElementById('result').style.display = "block";
+  document.getElementById('result').style.display = "flex";
 }
 
 function copyFCR() {
@@ -207,9 +227,9 @@ document.querySelectorAll('#avgWeight, #totalBirds, #weightUnit').forEach(el => 
     if (!isNaN(avgWeight) && !isNaN(totalBirds)) {
       const avgWeightKg = weightUnit === "g" ? avgWeight / 1000 : avgWeight;
       const totalWeight = avgWeightKg * totalBirds;
-      document.getElementById('totalWeightBox').textContent = `Total: ${totalWeight.toFixed(2)} kg`;
+      document.getElementById('totalWeightBox').textContent = `${totalWeight.toFixed(2)} kg`;
     } else {
-      document.getElementById('totalWeightBox').textContent = "Total: 0 kg";
+      document.getElementById('totalWeightBox').textContent = "0 kg";
     }
   });
 });
