@@ -66,6 +66,20 @@
     background-color: #1e293b;
     color: white;
     text-align: center;
+    border: 1px solid rgba(255,255,255,0.2);
+    appearance: none;          /* removes default OS styling */
+    -webkit-appearance: none;  /* removes iOS full-screen effect */
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="white" height="12" viewBox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+    padding-right: 25px;
+  }
+
+  /* Prevent fullscreen dropdown on mobile */
+  select:focus {
+    outline: none;
   }
 
   .total-output {
@@ -149,14 +163,6 @@
     text-decoration: underline;
   }
 
-  @media (max-width: 480px) {
-    .input-row {
-      flex-direction: row;
-    }
-    select, .total-output {
-      width: 80px;
-    }
-  }
 </style>
 </head>
 <body>
