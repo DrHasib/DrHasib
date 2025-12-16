@@ -46,7 +46,7 @@
 
   input {
     flex: 1;
-    height: 46px;
+    height: 42px;
     padding: 10px;
     border-radius: 8px;
     border: none;
@@ -58,7 +58,10 @@
   .dropdown {
     position: relative;
     width: 90px;
-    height: 46px;
+    height: 42px;
+    border: 2px solid white;
+    border-radius: 8px;
+    box-sizing: border-box;
   }
 
   .dropdown button {
@@ -67,13 +70,12 @@
     background-color: #1e293b;
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     font-size: 15px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
   }
 
   .dropdown button svg {
@@ -86,13 +88,14 @@
   .dropdown-list {
     display: none;
     position: absolute;
-    top: 48px;
+    top: 44px;
     left: 0;
     background-color: #1e293b;
     border-radius: 8px;
     overflow: hidden;
     z-index: 10;
     width: 100%;
+    border: 1px solid rgba(255,255,255,0.3);
   }
 
   .dropdown-list div {
@@ -107,7 +110,7 @@
 
   .total-output {
     width: 90px;
-    height: 46px;
+    height: 42px;
     background-color: #1e293b;
     color: #38bdf8;
     border-radius: 8px;
@@ -115,6 +118,8 @@
     justify-content: center;
     align-items: center;
     font-weight: bold;
+    border: 2px solid white;
+    box-sizing: border-box;
   }
 
   button.calc-btn {
