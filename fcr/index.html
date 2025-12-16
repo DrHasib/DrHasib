@@ -14,13 +14,12 @@
     align-items: center;
     padding: 20px;
     min-height: 100vh;
-    box-sizing: border-box;
   }
 
   h1 {
     color: #38bdf8;
-    margin-bottom: 20px;
     text-align: center;
+    margin-bottom: 20px;
   }
 
   .calculator {
@@ -28,14 +27,13 @@
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 16px;
     padding: 20px;
-    width: 100%;
     max-width: 420px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    width: 100%;
   }
 
   label {
-    font-weight: bold;
     display: block;
+    font-weight: bold;
     margin-bottom: 6px;
   }
 
@@ -46,55 +44,64 @@
     margin-bottom: 14px;
   }
 
-  input, select, .total-output {
+  input {
+    flex: 1;
     height: 44px;
+    padding: 10px;
     border-radius: 8px;
     border: none;
     font-size: 15px;
     outline: none;
-    box-sizing: border-box;
   }
 
-  input {
-    flex: 1;
-    padding: 10px;
-    width: 100%;
-  }
-
-  select {
+  /* Custom dropdown wrapper */
+  .dropdown {
+    position: relative;
     width: 90px;
+  }
+  .dropdown button {
+    width: 100%;
+    height: 44px;
     background-color: #1e293b;
     color: white;
-    text-align: center;
-    border: 1px solid rgba(255,255,255,0.2);
-    appearance: none;          /* removes default OS styling */
-    -webkit-appearance: none;  /* removes iOS full-screen effect */
-    -moz-appearance: none;
-    background-image: url('data:image/svg+xml;utf8,<svg fill="white" height="12" viewBox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 12px;
-    padding-right: 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
   }
-
-  /* Prevent fullscreen dropdown on mobile */
-  select:focus {
-    outline: none;
+  .dropdown-list {
+    display: none;
+    position: absolute;
+    top: 48px;
+    left: 0;
+    background-color: #1e293b;
+    border-radius: 8px;
+    overflow: hidden;
+    z-index: 10;
+    width: 100%;
+  }
+  .dropdown-list div {
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+  }
+  .dropdown-list div:hover {
+    background-color: #334155;
   }
 
   .total-output {
     width: 90px;
+    height: 44px;
     background-color: #1e293b;
     color: #38bdf8;
-    text-align: center;
+    border-radius: 8px;
     display: flex;
     justify-content: center;
     align-items: center;
     font-weight: bold;
   }
 
-  button {
-    margin-top: 10px;
+  button.calc-btn {
     width: 100%;
     background-color: #38bdf8;
     color: #0f172a;
@@ -105,8 +112,7 @@
     cursor: pointer;
     font-weight: bold;
   }
-
-  button:hover {
+  button.calc-btn:hover {
     background-color: #0ea5e9;
   }
 
@@ -123,11 +129,9 @@
     border-radius: 8px;
     padding: 12px;
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
     font-weight: bold;
-    font-size: 16px;
-    position: relative;
   }
 
   .copy-icon {
@@ -135,16 +139,13 @@
     height: 20px;
     cursor: pointer;
     fill: #0f172a;
-    transition: opacity 0.3s ease;
   }
 
   .copied-text {
-    position: absolute;
-    right: 40px;
     font-size: 13px;
     color: #16a34a;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    margin-left: 5px;
   }
 
   footer {
@@ -162,7 +163,6 @@
   footer a:hover {
     text-decoration: underline;
   }
-
 </style>
 </head>
 <body>
@@ -173,10 +173,13 @@
   <label>Average Body Weight per Bird:</label>
   <div class="input-row">
     <input type="number" id="avgWeight" placeholder="Enter average weight" step="0.01">
-    <select id="weightUnit">
-      <option value="kg">kg</option>
-      <option value="g">g</option>
-    </select>
+    <div class="dropdown" id="weightDropdown">
+      <button id="weightBtn">kg</button>
+      <div class="dropdown-list">
+        <div onclick="selectUnit('weight', 'kg')">kg</div>
+        <div onclick="selectUnit('weight', 'g')">g</div>
+      </div>
+    </div>
   </div>
 
   <label>Total Birds:</label>
@@ -188,22 +191,25 @@
   <label>Total Feed Consumed:</label>
   <div class="input-row">
     <input type="number" id="feedConsumed" placeholder="Enter feed consumed" step="0.01">
-    <select id="feedUnit">
-      <option value="kg">kg</option>
-      <option value="g">g</option>
-    </select>
+    <div class="dropdown" id="feedDropdown">
+      <button id="feedBtn">kg</button>
+      <div class="dropdown-list">
+        <div onclick="selectUnit('feed', 'kg')">kg</div>
+        <div onclick="selectUnit('feed', 'g')">g</div>
+      </div>
+    </div>
   </div>
 
-  <button onclick="calculateFCR()">Calculate FCR</button>
+  <button class="calc-btn" onclick="calculateFCR()">Calculate FCR</button>
 
   <div class="result" id="result" style="display:none;">
     <div class="result-box">
       <span>FCR: <span id="fcr">0.000</span></span>
-      <div>
-        <span class="copied-text" id="copiedText">Copied</span>
+      <div style="display:flex;align-items:center;">
         <svg class="copy-icon" onclick="copyFCR()" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
           <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v16h14c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 18H8V7h11v16z"/>
         </svg>
+        <span class="copied-text" id="copiedText">Copied</span>
       </div>
     </div>
     <div class="result-box">
@@ -217,12 +223,38 @@
 </footer>
 
 <script>
+let weightUnit = "kg";
+let feedUnit = "kg";
+
+function selectUnit(type, unit) {
+  if (type === 'weight') {
+    weightUnit = unit;
+    document.getElementById('weightBtn').textContent = unit;
+    document.querySelector("#weightDropdown .dropdown-list").style.display = 'none';
+  } else {
+    feedUnit = unit;
+    document.getElementById('feedBtn').textContent = unit;
+    document.querySelector("#feedDropdown .dropdown-list").style.display = 'none';
+  }
+}
+
+document.querySelectorAll('.dropdown button').forEach(btn => {
+  btn.addEventListener('click', e => {
+    const list = e.target.nextElementSibling;
+    list.style.display = list.style.display === 'block' ? 'none' : 'block';
+  });
+});
+
+window.addEventListener('click', e => {
+  if (!e.target.closest('.dropdown')) {
+    document.querySelectorAll('.dropdown-list').forEach(l => l.style.display = 'none');
+  }
+});
+
 function calculateFCR() {
   const avgWeight = parseFloat(document.getElementById('avgWeight').value);
   const totalBirds = parseInt(document.getElementById('totalBirds').value);
   const feedConsumed = parseFloat(document.getElementById('feedConsumed').value);
-  const weightUnit = document.getElementById('weightUnit').value;
-  const feedUnit = document.getElementById('feedUnit').value;
 
   if (isNaN(avgWeight) || isNaN(totalBirds) || isNaN(feedConsumed) || totalBirds <= 0 || feedConsumed <= 0) {
     alert("Please enter valid numbers in all fields.");
@@ -245,25 +277,21 @@ function calculateFCR() {
 function copyFCR() {
   const fcrValue = document.getElementById('fcr').textContent;
   navigator.clipboard.writeText(fcrValue);
-  
-  const copiedText = document.getElementById('copiedText');
-  copiedText.style.opacity = '1';
-  setTimeout(() => copiedText.style.opacity = '0', 1500);
+  const copied = document.getElementById('copiedText');
+  copied.style.opacity = '1';
+  setTimeout(() => copied.style.opacity = '0', 1500);
 }
 
-// Live total weight update
-document.querySelectorAll('#avgWeight, #totalBirds, #weightUnit').forEach(el => {
+// live total weight
+document.querySelectorAll('#avgWeight, #totalBirds').forEach(el => {
   el.addEventListener('input', () => {
-    const avgWeight = parseFloat(document.getElementById('avgWeight').value);
-    const totalBirds = parseInt(document.getElementById('totalBirds').value);
-    const weightUnit = document.getElementById('weightUnit').value;
-
-    if (!isNaN(avgWeight) && !isNaN(totalBirds)) {
-      const avgWeightKg = weightUnit === "g" ? avgWeight / 1000 : avgWeight;
-      const totalWeight = avgWeightKg * totalBirds;
-      document.getElementById('totalWeightBox').textContent = `${totalWeight.toFixed(2)} kg`;
+    const avg = parseFloat(document.getElementById('avgWeight').value);
+    const birds = parseInt(document.getElementById('totalBirds').value);
+    if (!isNaN(avg) && !isNaN(birds)) {
+      const total = (weightUnit === 'g' ? avg/1000 : avg) * birds;
+      document.getElementById('totalWeightBox').textContent = `${total.toFixed(2)} kg`;
     } else {
-      document.getElementById('totalWeightBox').textContent = "0 kg";
+      document.getElementById('totalWeightBox').textContent = '0 kg';
     }
   });
 });
