@@ -1,33 +1,123 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Simple Calculator</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Basic Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+    .calculator {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 260px;
+    }
+    .display {
+      width: 100%;
+      height: 50px;
+      text-align: right;
+      font-size: 24px;
+      margin-bottom: 10px;
+      padding: 5px 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    button {
+      padding: 15px;
+      font-size: 18px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #eee;
+      transition: 0.2s;
+    }
+    button:hover {
+      background-color: #ddd;
+    }
+    button.operator {
+      background-color: #ff9500;
+      color: white;
+    }
+    button.operator:hover {
+      background-color: #e08a00;
+    }
+    button.equal {
+      background-color: #007bff;
+      color: white;
+      grid-column: span 2;
+    }
+    button.equal:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
-  <h2>Simple Calculator</h2>
-  <input type="number" id="num1" placeholder="Number 1">
-  <input type="number" id="num2" placeholder="Number 2">
-  <select id="operator">
-    <option value="+">+</option>
-    <option value="-">-</option>
-    <option value="*">*</option>
-    <option value="/">/</option>
-  </select>
-  <button onclick="calculate()">Calculate</button>
-  <p>Result: <span id="result">0</span></p>
+  <div class="calculator">
+    <input type="text" class="display" id="display" disabled>
+    <div class="buttons">
+      <button onclick="appendNumber('7')">7</button>
+      <button onclick="appendNumber('8')">8</button>
+      <button onclick="appendNumber('9')">9</button>
+      <button class="operator" onclick="appendOperator('/')">/</button>
+
+      <button onclick="appendNumber('4')">4</button>
+      <button onclick="appendNumber('5')">5</button>
+      <button onclick="appendNumber('6')">6</button>
+      <button class="operator" onclick="appendOperator('*')">*</button>
+
+      <button onclick="appendNumber('1')">1</button>
+      <button onclick="appendNumber('2')">2</button>
+      <button onclick="appendNumber('3')">3</button>
+      <button class="operator" onclick="appendOperator('-')">-</button>
+
+      <button onclick="appendNumber('0')">0</button>
+      <button onclick="appendNumber('.')">.</button>
+      <button class="equal" onclick="calculateResult()">=</button>
+      <button class="operator" onclick="appendOperator('+')">+</button>
+
+      <button onclick="clearDisplay()" style="grid-column: span 4; background-color:#f44336; color:white;">C</button>
+    </div>
+  </div>
 
   <script>
-    function calculate() {
-      var num1 = parseFloat(document.getElementById('num1').value);
-      var num2 = parseFloat(document.getElementById('num2').value);
-      var op = document.getElementById('operator').value;
-      var res;
-      if(op == "+") res = num1 + num2;
-      else if(op == "-") res = num1 - num2;
-      else if(op == "*") res = num1 * num2;
-      else if(op == "/") res = num1 / num2;
-      else res = "Invalid operator";
-      document.getElementById('result').innerText = res;
+    const display = document.getElementById('display');
+
+    function appendNumber(number) {
+      display.value += number;
+    }
+
+    function appendOperator(operator) {
+      if(display.value === '') return;
+      const lastChar = display.value[display.value.length - 1];
+      if(['+', '-', '*', '/'].includes(lastChar)) {
+        display.value = display.value.slice(0, -1); // replace last operator
+      }
+      display.value += operator;
+    }
+
+    function calculateResult() {
+      try {
+        display.value = eval(display.value);
+      } catch {
+        display.value = 'Error';
+      }
+    }
+
+    function clearDisplay() {
+      display.value = '';
     }
   </script>
 </body>
