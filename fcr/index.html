@@ -46,7 +46,7 @@
 
   input {
     flex: 1;
-    height: 44px;
+    height: 46px;
     padding: 10px;
     border-radius: 8px;
     border: none;
@@ -54,21 +54,35 @@
     outline: none;
   }
 
-  /* Custom dropdown wrapper */
+  /* Custom dropdown */
   .dropdown {
     position: relative;
     width: 90px;
+    height: 46px;
   }
+
   .dropdown button {
     width: 100%;
-    height: 44px;
+    height: 100%;
     background-color: #1e293b;
     color: white;
     border: none;
     border-radius: 8px;
     font-size: 15px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
   }
+
+  .dropdown button svg {
+    width: 14px;
+    height: 14px;
+    margin-left: 6px;
+    fill: white;
+  }
+
   .dropdown-list {
     display: none;
     position: absolute;
@@ -80,18 +94,20 @@
     z-index: 10;
     width: 100%;
   }
+
   .dropdown-list div {
     padding: 10px;
     text-align: center;
     cursor: pointer;
   }
+
   .dropdown-list div:hover {
     background-color: #334155;
   }
 
   .total-output {
     width: 90px;
-    height: 44px;
+    height: 46px;
     background-color: #1e293b;
     color: #38bdf8;
     border-radius: 8px;
@@ -112,6 +128,7 @@
     cursor: pointer;
     font-weight: bold;
   }
+
   button.calc-btn:hover {
     background-color: #0ea5e9;
   }
@@ -174,7 +191,11 @@
   <div class="input-row">
     <input type="number" id="avgWeight" placeholder="Enter average weight" step="0.01">
     <div class="dropdown" id="weightDropdown">
-      <button id="weightBtn">kg</button>
+      <button id="weightBtn">kg
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M7 10l5 5 5-5z"/>
+        </svg>
+      </button>
       <div class="dropdown-list">
         <div onclick="selectUnit('weight', 'kg')">kg</div>
         <div onclick="selectUnit('weight', 'g')">g</div>
@@ -192,7 +213,11 @@
   <div class="input-row">
     <input type="number" id="feedConsumed" placeholder="Enter feed consumed" step="0.01">
     <div class="dropdown" id="feedDropdown">
-      <button id="feedBtn">kg</button>
+      <button id="feedBtn">kg
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M7 10l5 5 5-5z"/>
+        </svg>
+      </button>
       <div class="dropdown-list">
         <div onclick="selectUnit('feed', 'kg')">kg</div>
         <div onclick="selectUnit('feed', 'g')">g</div>
@@ -229,18 +254,18 @@ let feedUnit = "kg";
 function selectUnit(type, unit) {
   if (type === 'weight') {
     weightUnit = unit;
-    document.getElementById('weightBtn').textContent = unit;
+    document.getElementById('weightBtn').childNodes[0].nodeValue = unit + ' ';
     document.querySelector("#weightDropdown .dropdown-list").style.display = 'none';
   } else {
     feedUnit = unit;
-    document.getElementById('feedBtn').textContent = unit;
+    document.getElementById('feedBtn').childNodes[0].nodeValue = unit + ' ';
     document.querySelector("#feedDropdown .dropdown-list").style.display = 'none';
   }
 }
 
 document.querySelectorAll('.dropdown button').forEach(btn => {
   btn.addEventListener('click', e => {
-    const list = e.target.nextElementSibling;
+    const list = e.target.closest('.dropdown').querySelector('.dropdown-list');
     list.style.display = list.style.display === 'block' ? 'none' : 'block';
   });
 });
@@ -282,7 +307,6 @@ function copyFCR() {
   setTimeout(() => copied.style.opacity = '0', 1500);
 }
 
-// live total weight
 document.querySelectorAll('#avgWeight, #totalBirds').forEach(el => {
   el.addEventListener('input', () => {
     const avg = parseFloat(document.getElementById('avgWeight').value);
