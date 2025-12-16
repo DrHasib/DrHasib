@@ -47,7 +47,7 @@
       border-radius: 10px;
       cursor: pointer;
       background-color: #333; /* সব বাটনের ব্যাকগ্রাউন্ড একই */
-      color: #fff; /* default number text color */
+      color: #fff; /* নাম্বার বাটনের টেক্সট কালার */
       transition: 0.2s;
     }
     button:hover {
@@ -94,7 +94,7 @@
       <button class="equal" onclick="calculateResult()">=</button>
 
       <!-- Row 5 -->
-      <button class="operator" onclick="appendOperator('%')">%</button>
+      <button class="operator" onclick="percentage()">%</button>
       <button onclick="appendNumber('0')">0</button>
       <button onclick="appendNumber('.')">.</button>
     </div>
@@ -110,14 +110,14 @@
     function appendOperator(operator) {
       if(display.value === '') return;
       const lastChar = display.value[display.value.length - 1];
-      if(['+', '-', 'x', '÷', '%'].includes(lastChar)) {
+      if(['+', '-', 'x', '÷'].includes(lastChar)) {
         display.value = display.value.slice(0, -1); // replace last operator
       }
       display.value += operator;
     }
 
     function calculateResult() {
-      let expr = display.value.replace(/÷/g, '/').replace(/x/g, '*').replace(/%/g, '/100*');
+      let expr = display.value.replace(/÷/g, '/').replace(/x/g, '*');
       try {
         display.value = eval(expr);
       } catch {
@@ -131,6 +131,17 @@
 
     function backspace() {
       display.value = display.value.slice(0, -1);
+    }
+
+    function percentage() {
+      if(display.value === '') return;
+      // find last number in display
+      let lastNumberMatch = display.value.match(/(\d+\.?\d*)$/);
+      if(lastNumberMatch) {
+        let number = parseFloat(lastNumberMatch[0]);
+        let result = number / 100;
+        display.value = display.value.replace(/(\d+\.?\d*)$/, result);
+      }
     }
   </script>
 </body>
