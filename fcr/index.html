@@ -4,10 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FCR Calculator - Dr Hasibul Alam</title>
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="favicon-192x192.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <style>
   body {
     background-color: #0f172a;
@@ -178,19 +174,24 @@
     margin-left: 4px;
   }
 
-  footer {
+  /* Branding box */
+  .branding-box {
     margin-top: 25px;
-    text-align: center;
+    padding: 8px 12px;
+    border: 1px solid white;
+    border-radius: 8px;
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.05);
     font-size: 13px;
   }
 
-  footer a {
+  .branding-box a {
     color: #38bdf8;
     text-decoration: none;
     font-weight: bold;
   }
 
-  footer a:hover {
+  .branding-box a:hover {
     text-decoration: underline;
   }
 </style>
@@ -252,9 +253,10 @@
   </div>
 </div>
 
-<footer>
+<!-- Branding Box -->
+<div class="branding-box">
   Made by <a href="https://drhasib.com" target="_blank">Dr Hasibul Alam</a>
-</footer>
+</div>
 
 <script>
 let weightUnit = "kg";
